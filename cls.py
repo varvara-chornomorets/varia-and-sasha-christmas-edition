@@ -28,7 +28,7 @@ class Paddle:
         self.goal = Vector(0, 0)
 
     def draw(self):
-        screen.draw.filled_circle((self.position.x, self.position.y), 5, "yellow")
+        screen.draw.filled_rect(Rect((self.position.x-50, self.position.y-10), (100, 20)), "yellow")
 
     def position(self):
         return Vector(self.position.x, self.position.y)
@@ -48,19 +48,19 @@ WIDTH = 800
 HEIGHT = 800
 
 some_position = Vector(700, 700)
-my_circle = Paddle(some_position)
+platform = Paddle(some_position)
 
 
 def draw():
     screen.clear()
-    my_circle.draw()
+    platform.draw()
 
 def update(dt):
-    my_circle.update(dt)
+    platform.update(dt)
 
 
 def on_mouse_move(pos):
-    my_circle.look_at(pos)
+    platform.look_at(pos)
 
 
 pgzrun.go()
