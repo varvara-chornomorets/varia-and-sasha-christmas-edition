@@ -7,7 +7,7 @@ HEIGHT = 600
 PLATFORM_WIDTH = 200
 PLATFORM_HEIGHT = 20
 BALL_RADIUS = 15
-
+platform_x = 0
 
 
 class Vector:
@@ -36,7 +36,7 @@ class Paddle:
         self.goal = Vector(0, 0)
 
     def draw(self, screen):
-        screen.draw.filled_rect(Rect((self.position.x-50, self.position.y-10), (PLATFORM_WIDTH, PLATFORM_HEIGHT)), "yellow")
+        screen.draw.filled_rect(Rect((self.position.x-100, self.position.y-10), (PLATFORM_WIDTH, PLATFORM_HEIGHT)), "yellow")
 
     def position(self):
         return Vector(self.position.x, self.position.y)
@@ -50,16 +50,14 @@ class Paddle:
         self.velocity = desired
 
         self.position.x += self.velocity.x
+        global platform_x
+        platform_x = self.position.x
 
-
-platform_start_position = Vector(700, 500)
-ball_start_pos = Vector(17, 20)
-platform = Paddle(platform_start_position)
 
 class Ball:
     def __init__(self, pos: Vector):
         self.position = pos
-        self.velocity = Vector(1, 1.5)
+        self.velocity = Vector(1.5, 2.25)
 
     def draw(self, screen):
         screen.draw.filled_circle((self.position.x, self.position.y), BALL_RADIUS, "blue")
@@ -68,11 +66,18 @@ class Ball:
         return Vector(self.position.x, self.position.y)
 
     def update(self, dt):
+        global platform_x
         position = Vector(self.position.x, self.position.y)
         if self.position.y < BALL_RADIUS:
             self.velocity.y = -self.velocity.y
-        if self.position.y > 475:
-            self.velocity.y = -self.velocity.y
+
+        if 490 < self.position.y < 510:
+            if platform_x - 115 < self.position.x < platform_x + 115:
+                self.velocity.x = -self.velocity.x
+
+        if 475 < self.position.y < 478:
+            if platform_x - 100 < self.position.x < platform_x + 100:
+                self.velocity.y = -self.velocity.y
 
         # if self.position.y > WIDTH - PLATFORM_HEIGHT -BALL_RADIUS:
         #     if self.position.x > platform.position.x
@@ -80,4 +85,3 @@ class Ball:
             self.velocity.x = -self.velocity.x
         self.position.x += self.velocity.x
         self.position.y += self.velocity.y
-
