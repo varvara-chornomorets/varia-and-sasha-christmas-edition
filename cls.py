@@ -1,5 +1,5 @@
 import math
-import pgzrun
+from pgzero.rect import Rect
 
 
 class Vector:
@@ -27,7 +27,7 @@ class Paddle:
         self.velocity = Vector(0, 0)
         self.goal = Vector(0, 0)
 
-    def draw(self):
+    def draw(self, screen):
         screen.draw.filled_rect(Rect((self.position.x-50, self.position.y-10), (100, 20)), "yellow")
 
     def position(self):
