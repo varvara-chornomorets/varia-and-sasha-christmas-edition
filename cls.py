@@ -57,7 +57,7 @@ class Paddle:
 class Ball:
     def __init__(self, pos: Vector):
         self.position = pos
-        self.velocity = Vector(1.5, 2.25)
+        self.velocity = Vector(2, 3)
 
     def draw(self, screen):
         screen.draw.filled_circle((self.position.x, self.position.y), BALL_RADIUS, "blue")
@@ -79,9 +79,35 @@ class Ball:
             if platform_x - 100 < self.position.x < platform_x + 100:
                 self.velocity.y = -self.velocity.y
 
-        # if self.position.y > WIDTH - PLATFORM_HEIGHT -BALL_RADIUS:
-        #     if self.position.x > platform.position.x
+
         if self.position.x > WIDTH - BALL_RADIUS or self.position.x < BALL_RADIUS:
             self.velocity.x = -self.velocity.x
         self.position.x += self.velocity.x
         self.position.y += self.velocity.y
+
+
+class Heart:
+    def __init__(self):
+        self.actor = Actor('xconvert.com', center=(400, 400))
+        self.velocity = Vector(0, 0)
+        self.goal = Vector(0, 0)
+
+    def draw(self):
+        self.actor.draw()
+
+    # def position(self):
+    #     return Vector(self.actor.x, self.actor.y)
+    #
+    # def look_at(self, pos):
+    #     self.goal = Vector(pos[0], pos[1])
+    #     self.actor.angle = self.actor.angle_to((pos[0] + self.velocity.x, pos[1] + self.velocity.y)) - 90
+    #
+    # def update(self, dt):
+    #     position = Vector(self.actor.x, self.actor.y)
+    #     desired = self.goal - position
+    #     desired = desired.normalized() * 10
+    #     self.velocity += desired
+    #     if self.velocity.magnitude() > 150:
+    #         self.velocity = self.velocity.normalized() * 150
+    #     self.actor.x += self.velocity.x * dt
+    #     self.actor.y += self.velocity.y * dt
