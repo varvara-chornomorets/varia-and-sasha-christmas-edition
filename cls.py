@@ -8,7 +8,9 @@ HEIGHT = 600
 PLATFORM_WIDTH = 200
 PLATFORM_HEIGHT = 20
 BALL_RADIUS = 15
-ENEMY_RADIUS = 15
+OBSTACLE_RADIUS = 15
+OBSTACLE_WIDTH = 100
+OBSTACLE_HEIGHT = 20
 platform_x = 0
 
 
@@ -117,16 +119,35 @@ class Heart:
     #     self.actor.y += self.velocity.y * dt
 
 
-class Enemy:
+class Obstacle:
     def __init__(self, pos: Vector):
         self.position = pos
 
     def draw(self, screen):
-        screen.draw.filled_circle((self.position.x, self.position.y), ENEMY_RADIUS, "red")
+        screen.draw.filled_circle((self.position.x, self.position.y), OBSTACLE_RADIUS, "red")
 
     def update(self, screen, ball: Ball):
         dist = math.sqrt((ball.position.x - self.position.x)**2 + (ball.position.y - self.position.y)**2)
-        if dist < ENEMY_RADIUS:
+        if dist < OBSTACLE_RADIUS:
             return (ball.position.x - self.position.x), (ball.position.y - self.position.y)
+        else:
+            return False
+
+
+class Obstacle2:
+    def __init__(self, pos: Vector):
+        self.position = pos
+
+    def draw(self, screen):
+        screen.draw.filled_rect(Rect((self.position.x-50, self.position.y-10), (OBSTACLE_WIDTH, OBSTACLE_HEIGHT)), "red")
+
+    def update(self, screen, ball: Ball):
+        if self.position.y - 10 < ball.position.y < self.position.y + 10:
+            if self.position.x - 65 < ball.position.x < self.position.x + 65:
+                print(self.position.x, self.position.y, ball.position.x, ball.position.y)
+                return 2
+        elif self.position.y - 25 < ball.position.y < self.position.y + 25:
+            if self.position.x - 50 < ball.position.x < self.position.x + 50:
+                return 1
         else:
             return False
