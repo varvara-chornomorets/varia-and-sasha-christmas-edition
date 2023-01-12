@@ -12,7 +12,6 @@ my_ball = Ball(ball_start_pos)
 heart = Heart()
 
 
-
 def draw():
     screen.clear()
     platform.draw(screen)
@@ -22,8 +21,7 @@ def draw():
 
 def update(dt):
     platform.update(dt)
-    my_ball.update(dt, platform)
-
+    my_ball.update(dt)
 
 
 def on_mouse_move(pos):

@@ -1,5 +1,6 @@
 import math
 from pgzero.rect import Rect
+from pgzero.actor import Actor
 
 
 WIDTH = 600
@@ -78,7 +79,6 @@ class Ball:
         if 475 < self.position.y < 478:
             if platform_x - 100 < self.position.x < platform_x + 100:
                 self.velocity.y = -self.velocity.y
-
 
         if self.position.x > WIDTH - BALL_RADIUS or self.position.x < BALL_RADIUS:
             self.velocity.x = -self.velocity.x
