@@ -8,6 +8,7 @@ HEIGHT = 600
 PLATFORM_WIDTH = 200
 PLATFORM_HEIGHT = 20
 BALL_RADIUS = 15
+ENEMY_RADIUS = 15
 platform_x = 0
 
 
@@ -25,6 +26,9 @@ class Vector:
 
     def __sub__(self, other):
         return Vector(self.x - other.x, self.y - other.y)
+
+    def __mul__(self, other):
+        return Vector(self.x * other, self.y * other)
 
     def __str__(self):
         return f"({self.x}, {self.y})"
@@ -76,7 +80,7 @@ class Ball:
             if platform_x - 115 < self.position.x < platform_x + 115:
                 self.velocity.x = -self.velocity.x
 
-        if 475 < self.position.y < 478:
+        if 475 < self.position.y < 480:
             if platform_x - 100 < self.position.x < platform_x + 100:
                 self.velocity.y = -self.velocity.y
 
@@ -111,3 +115,18 @@ class Heart:
     #         self.velocity = self.velocity.normalized() * 150
     #     self.actor.x += self.velocity.x * dt
     #     self.actor.y += self.velocity.y * dt
+
+
+class Enemy:
+    def __init__(self, pos: Vector):
+        self.position = pos
+
+    def draw(self, screen):
+        screen.draw.filled_circle((self.position.x, self.position.y), ENEMY_RADIUS, "red")
+
+    def update(self, screen, ball: Ball):
+        dist = math.sqrt((ball.position.x - self.position.x)**2 + (ball.position.y - self.position.y)**2)
+        if dist < ENEMY_RADIUS:
+            return (ball.position.x - self.position.x), (ball.position.y - self.position.y)
+        else:
+            return False
