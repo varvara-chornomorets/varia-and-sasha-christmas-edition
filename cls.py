@@ -55,6 +55,9 @@ class Paddle:
         platform_x = self.position.x
 
 
+ball_start_pos = Vector(17, 20)
+
+
 class Ball:
     def __init__(self, pos: Vector):
         self.position = pos
@@ -66,16 +69,21 @@ class Ball:
     def position(self):
         return Vector(self.position.x, self.position.y)
 
+    def ball_is_out(self):
+        return self.position.y > HEIGHT + BALL_RADIUS
+
     def update(self, dt):
+        if self.ball_is_out():
+            self.position.x = ball_start_pos.x
+            self.position.y = ball_start_pos.y
         global platform_x
-        position = Vector(self.position.x, self.position.y)
         if self.position.y < BALL_RADIUS:
             self.velocity.y = -self.velocity.y
-
+        # edges of the platform
         if 490 < self.position.y < 510:
             if platform_x - 115 < self.position.x < platform_x + 115:
                 self.velocity.x = -self.velocity.x
-
+        # platform
         if 475 < self.position.y < 478:
             if platform_x - 100 < self.position.x < platform_x + 100:
                 self.velocity.y = -self.velocity.y
@@ -87,17 +95,19 @@ class Ball:
 
 
 class Heart:
-    def __init__(self):
-        self.actor = Actor('xconvert.com', center=(400, 400))
+    def __init__(self, pos: Vector):
+        self.actor = Actor('heart', center=(pos.x, pos.y))
         self.velocity = Vector(0, 0)
         self.goal = Vector(0, 0)
+
+    def position(self):
+        return Vector(self.actor.x, self.actor.y)
 
     def draw(self):
         self.actor.draw()
 
-    # def position(self):
-    #     return Vector(self.actor.x, self.actor.y)
-    #
+
+
     # def look_at(self, pos):
     #     self.goal = Vector(pos[0], pos[1])
     #     self.actor.angle = self.actor.angle_to((pos[0] + self.velocity.x, pos[1] + self.velocity.y)) - 90
@@ -111,3 +121,4 @@ class Heart:
     #         self.velocity = self.velocity.normalized() * 150
     #     self.actor.x += self.velocity.x * dt
     #     self.actor.y += self.velocity.y * dt
+
