@@ -28,17 +28,16 @@ def draw():
     for i in range(0, number_of_lives):
         position = Vector(HEART_START_POSITION.x + DISTANCE_BETWEEN_HEARTS * i, HEART_START_POSITION.y)
         Heart(position).draw()
-
-
-def count_lives():
-	global number_of_lives
-    if my_ball.ball_is_out():
-        number_of_lives = number_of_lives - 1
-
     for obstacle in obstacles:
         obstacle.draw(screen)
     for obstacle in obstacles2:
         obstacle.draw(screen)
+
+def count_lives():
+    global number_of_lives
+    if my_ball.ball_is_out():
+        number_of_lives = number_of_lives - 1
+
 
 
 def update(dt):
