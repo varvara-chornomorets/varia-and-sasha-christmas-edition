@@ -64,7 +64,7 @@ class Paddle:
 class Ball:
     def __init__(self, pos: Vector):
         self.position = pos
-        self.velocity = Vector(2, 3)
+        self.velocity = Vector(3, 2)
 
     def draw(self, screen):
         screen.draw.filled_circle((self.position.x, self.position.y), BALL_RADIUS, "blue")
@@ -149,5 +149,8 @@ class Obstacle2:
         elif self.position.y - 25 < ball.position.y < self.position.y + 25:
             if self.position.x - 50 < ball.position.x < self.position.x + 50:
                 return 1
+        elif self.position.y - 25 < ball.position.y < self.position.y + 25:
+            if self.position.x - 65 < ball.position.x < self.position.x + 65:
+                return 3
         else:
             return False

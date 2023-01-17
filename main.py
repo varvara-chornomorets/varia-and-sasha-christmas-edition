@@ -45,6 +45,10 @@ def update(dt):
         elif obstacle.update(screen, my_ball) == 2:
             my_ball.velocity.x = -my_ball.velocity.x
             obstacles2.remove(obstacle)
+        elif obstacle.update(screen, my_ball) == 3:
+            my_ball.velocity.x = -my_ball.velocity.x
+            my_ball.velocity.y = -my_ball.velocity.y
+            obstacles2.remove(obstacle)
 
 
 def on_mouse_move(pos):
