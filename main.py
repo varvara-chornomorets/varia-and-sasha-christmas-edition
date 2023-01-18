@@ -1,6 +1,7 @@
-from cls import Vector, Paddle, Ball, Heart, Obstacle, Obstacle2
+from cls import Vector, Paddle, Ball, Heart, Obstacle, Obstacle2, HeavyObstacle
 import pgzrun
 import pygame
+import math
 
 WIDTH = 600
 HEIGHT = 600
@@ -15,10 +16,13 @@ DISTANCE_BETWEEN_HEARTS = 23
 positions = []
 obstacles = []
 obstacles2 = []
+obstacles3 = []
 for i in range(100, 600, 100):
     obstacles.append(Obstacle(Vector(i, 100)))
+#for i in range(75, 600, 150):
+#    obstacles2.append(Obstacle2(Vector(i, 200)))
 for i in range(75, 600, 150):
-    obstacles2.append(Obstacle2(Vector(i, 200)))
+    obstacles3.append(HeavyObstacle(Vector(i, 200)))
 
 
 def draw():
@@ -32,12 +36,14 @@ def draw():
         obstacle.draw(screen)
     for obstacle in obstacles2:
         obstacle.draw(screen)
+    for obstacle in obstacles3:
+        obstacle.draw(screen)
+
 
 def count_lives():
     global number_of_lives
     if my_ball.ball_is_out():
         number_of_lives = number_of_lives - 1
-
 
 
 def update(dt):
@@ -51,6 +57,7 @@ def update(dt):
             k = 1/(new_velocity.magnitude()/my_ball.velocity.magnitude())
             my_ball.velocity = new_velocity*k
             obstacles.remove(obstacle)
+
     for obstacle in obstacles2:
         if obstacle.update(screen, my_ball) == 1:
             my_ball.velocity.y = -my_ball.velocity.y
@@ -62,6 +69,34 @@ def update(dt):
             my_ball.velocity.x = -my_ball.velocity.x
             my_ball.velocity.y = -my_ball.velocity.y
             obstacles2.remove(obstacle)
+
+    for obstacle in obstacles3:
+        if obstacle.update(screen, my_ball) == 1:
+            my_ball.velocity.y = -my_ball.velocity.y
+            obstacle.lives -= 1
+            if obstacle.lives == 0:
+                obstacles3.remove(obstacle)
+        elif obstacle.update(screen, my_ball) == 2:
+            my_ball.velocity.x = -my_ball.velocity.x
+            obstacle.lives -= 1
+            if obstacle.lives == 0:
+                obstacles3.remove(obstacle)
+        elif obstacle.update(screen, my_ball) == 3:
+             # k = 1 / (math.sqrt(2) / my_ball.velocity.magnitude())
+             # if my_ball.position.x < obstacle.position.x:
+             #     my_ball.velocity.x = -1 * k
+             # elif my_ball.position.x > obstacle.position.x:
+             #     my_ball.velocity.x = 1 * k
+             # if my_ball.position.y < obstacle.position.y:
+             #     my_ball.velocity.y = -1 * k
+             # elif my_ball.position.y > obstacle.position.y:
+             #     my_ball.velocity.y = 1 * k
+            tempvelocity = my_ball.velocity.x
+            my_ball.velocity.x = my_ball.velocity.y
+            my_ball.velocity.y = tempvelocity
+            obstacle.lives -= 1
+            if obstacle.lives == 0:
+                obstacles3.remove(obstacle)
 
 
 def on_mouse_move(pos):

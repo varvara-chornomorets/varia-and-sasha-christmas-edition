@@ -138,7 +138,7 @@ class Obstacle:
 
     def update(self, screen, ball: Ball):
         dist = math.sqrt((ball.position.x - self.position.x)**2 + (ball.position.y - self.position.y)**2)
-        if dist < OBSTACLE_RADIUS:
+        if dist < OBSTACLE_RADIUS + BALL_RADIUS:
             return (ball.position.x - self.position.x), (ball.position.y - self.position.y)
         else:
             return False
@@ -154,13 +154,34 @@ class Obstacle2:
     def update(self, screen, ball: Ball):
         if self.position.y - 10 < ball.position.y < self.position.y + 10:
             if self.position.x - 65 < ball.position.x < self.position.x + 65:
-                print(self.position.x, self.position.y, ball.position.x, ball.position.y)
                 return 2
-        elif self.position.y - 25 < ball.position.y < self.position.y + 25:
+        if self.position.y - 25 < ball.position.y < self.position.y + 25:
             if self.position.x - 50 < ball.position.x < self.position.x + 50:
                 return 1
-        elif self.position.y - 25 < ball.position.y < self.position.y + 25:
+        if self.position.y - 25 < ball.position.y < self.position.y + 25:
             if self.position.x - 65 < ball.position.x < self.position.x + 65:
+                return 3
+        else:
+            return False
+
+
+class HeavyObstacle:
+    def __init__(self, pos: Vector):
+        self.position = pos
+        self.lives = 3
+
+    def draw(self, screen):
+        screen.draw.filled_rect(Rect((self.position.x-50, self.position.y-10), (OBSTACLE_WIDTH, OBSTACLE_HEIGHT)), "blue")
+
+    def update(self, screen, ball: Ball):
+        if self.position.y - 10 < ball.position.y < self.position.y + 10:
+            if self.position.x - 65 < ball.position.x < self.position.x + 65:
+                return 2
+        if self.position.y - 25 < ball.position.y < self.position.y + 25:
+            if self.position.x - 50 < ball.position.x < self.position.x + 50:
+                return 1
+        if self.position.y - 20 < ball.position.y < self.position.y + 20:
+            if self.position.x - 60 < ball.position.x < self.position.x + 60:
                 return 3
         else:
             return False
