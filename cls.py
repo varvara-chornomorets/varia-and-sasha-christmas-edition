@@ -114,23 +114,6 @@ class Heart:
         self.actor.draw()
 
 
-
-    # def look_at(self, pos):
-    #     self.goal = Vector(pos[0], pos[1])
-    #     self.actor.angle = self.actor.angle_to((pos[0] + self.velocity.x, pos[1] + self.velocity.y)) - 90
-    #
-    # def update(self, dt):
-    #     position = Vector(self.actor.x, self.actor.y)
-    #     desired = self.goal - position
-    #     desired = desired.normalized() * 10
-    #     self.velocity += desired
-    #     if self.velocity.magnitude() > 150:
-    #         self.velocity = self.velocity.normalized() * 150
-    #     self.actor.x += self.velocity.x * dt
-    #     self.actor.y += self.velocity.y * dt
-
-
-
 class Obstacle:
     def __init__(self, pos: Vector):
         self.position = pos
@@ -182,20 +165,34 @@ class Bonus:
         actor = Actor("heart", center=(self.position.x, self.position.y))
         actor.draw()
 
+    def is_cought(self):
+        global platform_x
+        if 475 < self.position.y < 480:
+            if platform_x - 100 < self.position.x < platform_x + 100:
+                return True
+        return False
+
     def update(self, dt):
         self.position.y += self.velocity.y
         self.position.x += self.velocity.x
 
+        # if self.position.y < 5:
+        #     self.velocity.y = -self.velocity.y
+        # # edges of the platform
+        # if 490 < self.position.y < 510:
+        #     if platform_x - 115 < self.position.x < platform_x + 115:
+        #         self.velocity.x = -self.velocity.x
+        #
+        # if 475 < self.position.y < 480:
+        #     if platform_x - 100 < self.position.x < platform_x + 100:
+        #         self.velocity.y = -self.velocity.y
+        #
+        # if self.position.x > WIDTH - BALL_RADIUS or self.position.x < BALL_RADIUS:
+        #     self.velocity.x = -self.velocity.x
+        # self.position.x += self.velocity.x
+        # self.position.y += self.velocity.y
 
 
 
-# start_time = time.time()
-# print(start_time)
-#
-# print(time.sleep(5))
-#
-# end_time = time.time()
-# print(end_time)
-#
-# print(end_time - start_time)
+
 

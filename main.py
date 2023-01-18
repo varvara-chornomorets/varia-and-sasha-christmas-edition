@@ -24,7 +24,7 @@ for i in range(75, 600, 150):
     obstacles2.append(Obstacle2(Vector(i, 200)))
 
 is_over = False
-bonus = Bonus(Vector(400, -5))
+bonuses = []
 start_time = pygame.time.get_ticks()
 
 
@@ -32,7 +32,8 @@ def draw():
     screen.clear()
     platform.draw(screen)
     my_ball.draw(screen)
-    bonus.draw()
+    for bonus in bonuses:
+        bonus.draw()
     for i in range(0, number_of_lives):
         position = Vector(HEART_START_POSITION.x + DISTANCE_BETWEEN_HEARTS * i, HEART_START_POSITION.y)
         Heart(position).draw()
@@ -56,9 +57,18 @@ def count_lives():
 
 def update(dt):
     global is_over
+    global start_time
+    global number_of_lives
     current_time = pygame.time.get_ticks()
     if current_time - start_time > 10000:
+        bonuses.append(Bonus(Vector(400, -10)))
+        start_time = current_time
+    for bonus in bonuses:
         bonus.update(dt)
+        if bonus.is_cought():
+            bonuses.remove(bonus)
+            number_of_lives += 1
+
     platform.update(dt)
     my_ball.update(dt)
     count_lives()
