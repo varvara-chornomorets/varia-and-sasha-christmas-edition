@@ -1,7 +1,11 @@
+import random
+
+from pgzero.actor import Actor
 from cls import Vector, Paddle, Ball, Heart, Obstacle, Obstacle2, HeavyObstacle
 import pgzrun
 import pygame
 import math
+
 
 WIDTH = 600
 HEIGHT = 600
@@ -24,11 +28,17 @@ for i in range(100, 600, 100):
 for i in range(75, 600, 150):
     obstacles3.append(HeavyObstacle(Vector(i, 200)))
 
+is_over = False
+bonuses = []
+start_time = pygame.time.get_ticks()
+
 
 def draw():
     screen.clear()
     platform.draw(screen)
     my_ball.draw(screen)
+    for bonus in bonuses:
+        bonus.draw()
     for i in range(0, number_of_lives):
         position = Vector(HEART_START_POSITION.x + DISTANCE_BETWEEN_HEARTS * i, HEART_START_POSITION.y)
         Heart(position).draw()
@@ -38,6 +48,12 @@ def draw():
         obstacle.draw(screen)
     for obstacle in obstacles3:
         obstacle.draw(screen)
+    if is_over:
+        if number_of_lives == 0:
+            game_over = Actor("game", center=(WIDTH/2, HEIGHT/2))
+        else:
+            game_over = Actor("won", center=(WIDTH/2, HEIGHT/2))
+        game_over.draw()
 
 
 def count_lives():
@@ -47,6 +63,27 @@ def count_lives():
 
 
 def update(dt):
+    global is_over
+    global start_time
+    global number_of_lives
+    global my_ball
+
+    current_time = pygame.time.get_ticks()
+    if current_time - start_time > 10000:
+        # drop bonus at random x position
+        x_coordinate = random.randint(10, WIDTH - 10)
+        bonuses.append(Bonus(Vector(x_coordinate, -10)))
+        start_time = current_time
+
+        # speep up the game
+        my_ball.velocity = Vector(my_ball.velocity.x * 1.1, my_ball.velocity.y * 1.1)
+
+    for bonus in bonuses:
+        bonus.update(dt)
+        if bonus.is_cought():
+            bonuses.remove(bonus)
+            number_of_lives += 1
+
     platform.update(dt)
     my_ball.update(dt)
     count_lives()
@@ -97,6 +134,10 @@ def update(dt):
             obstacle.lives -= 1
             if obstacle.lives == 0:
                 obstacles3.remove(obstacle)
+    if number_of_lives <= 0 or (len(obstacles) == len(obstacles2) == 0):
+        my_ball.velocity = Vector(0, 0)
+        start_time = 9999999999999999
+        is_over = True
 
 
 def on_mouse_move(pos):
