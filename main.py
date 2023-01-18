@@ -1,3 +1,5 @@
+import random
+
 from pgzero.actor import Actor
 
 from cls import Vector, Paddle, Bonus, Ball, Heart, Obstacle, Obstacle2
@@ -61,7 +63,8 @@ def update(dt):
     global number_of_lives
     current_time = pygame.time.get_ticks()
     if current_time - start_time > 10000:
-        bonuses.append(Bonus(Vector(400, -10)))
+        x_coordinate = random.randint(10, WIDTH - 10)
+        bonuses.append(Bonus(Vector(x_coordinate, -10)))
         start_time = current_time
     for bonus in bonuses:
         bonus.update(dt)
@@ -93,6 +96,7 @@ def update(dt):
 
     if number_of_lives <= 0 or (len(obstacles) == len(obstacles2) == 0):
         my_ball.velocity = Vector(0, 0)
+        start_time = 9999999999999
         is_over = True
 
 
