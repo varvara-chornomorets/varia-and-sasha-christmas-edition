@@ -1,6 +1,7 @@
 import math
 from pgzero.rect import Rect
 from pgzero.actor import Actor
+import pygame
 
 
 WIDTH = 600
@@ -129,6 +130,7 @@ class Heart:
     #     self.actor.y += self.velocity.y * dt
 
 
+
 class Obstacle:
     def __init__(self, pos: Vector):
         self.position = pos
@@ -138,7 +140,7 @@ class Obstacle:
 
     def update(self, screen, ball: Ball):
         dist = math.sqrt((ball.position.x - self.position.x)**2 + (ball.position.y - self.position.y)**2)
-        if dist < OBSTACLE_RADIUS:
+        if dist < OBSTACLE_RADIUS + BALL_RADIUS:
             return (ball.position.x - self.position.x), (ball.position.y - self.position.y)
         else:
             return False
@@ -164,3 +166,36 @@ class Obstacle2:
                 return 3
         else:
             return False
+
+
+class Bonus:
+    def __init__(self, pos):
+        self.position = pos
+        self.actor = Actor('heart', center=(self.position.x, self.position.y))
+        self.velocity = Vector(0, 4)
+        self.goal = Vector(0, 0)
+
+    def position(self):
+        return Vector(self.actor.x, self.actor.y)
+
+    def draw(self):
+        actor = Actor("heart", center=(self.position.x, self.position.y))
+        actor.draw()
+
+    def update(self, dt):
+        self.position.y += self.velocity.y
+        self.position.x += self.velocity.x
+
+
+
+
+# start_time = time.time()
+# print(start_time)
+#
+# print(time.sleep(5))
+#
+# end_time = time.time()
+# print(end_time)
+#
+# print(end_time - start_time)
+

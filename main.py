@@ -1,6 +1,9 @@
-from cls import Vector, Paddle, Ball, Heart, Obstacle, Obstacle2
+from pgzero.actor import Actor
+
+from cls import Vector, Paddle, Bonus, Ball, Heart, Obstacle, Obstacle2
 import pgzrun
 import pygame
+
 
 WIDTH = 600
 HEIGHT = 600
@@ -20,11 +23,16 @@ for i in range(100, 600, 100):
 for i in range(75, 600, 150):
     obstacles2.append(Obstacle2(Vector(i, 200)))
 
+is_over = False
+bonus = Bonus(Vector(400, -5))
+start_time = pygame.time.get_ticks()
+
 
 def draw():
     screen.clear()
     platform.draw(screen)
     my_ball.draw(screen)
+    bonus.draw()
     for i in range(0, number_of_lives):
         position = Vector(HEART_START_POSITION.x + DISTANCE_BETWEEN_HEARTS * i, HEART_START_POSITION.y)
         Heart(position).draw()
@@ -32,6 +40,13 @@ def draw():
         obstacle.draw(screen)
     for obstacle in obstacles2:
         obstacle.draw(screen)
+    if is_over:
+        if number_of_lives == 0:
+            game_over = Actor("game", center=(WIDTH/2, HEIGHT/2))
+        else:
+            game_over = Actor("won", center=(WIDTH/2, HEIGHT/2))
+        game_over.draw()
+
 
 def count_lives():
     global number_of_lives
@@ -39,8 +54,11 @@ def count_lives():
         number_of_lives = number_of_lives - 1
 
 
-
 def update(dt):
+    global is_over
+    current_time = pygame.time.get_ticks()
+    if current_time - start_time > 10000:
+        bonus.update(dt)
     platform.update(dt)
     my_ball.update(dt)
     count_lives()
@@ -62,6 +80,10 @@ def update(dt):
             my_ball.velocity.x = -my_ball.velocity.x
             my_ball.velocity.y = -my_ball.velocity.y
             obstacles2.remove(obstacle)
+
+    if number_of_lives <= 0 or (len(obstacles) == len(obstacles2) == 0):
+        my_ball.velocity = Vector(0, 0)
+        is_over = True
 
 
 def on_mouse_move(pos):
