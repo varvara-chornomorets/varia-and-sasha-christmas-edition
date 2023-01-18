@@ -61,11 +61,18 @@ def update(dt):
     global is_over
     global start_time
     global number_of_lives
+    global my_ball
+
     current_time = pygame.time.get_ticks()
     if current_time - start_time > 10000:
+        # drop bonus at random x position
         x_coordinate = random.randint(10, WIDTH - 10)
         bonuses.append(Bonus(Vector(x_coordinate, -10)))
         start_time = current_time
+
+        # speep up the game
+        my_ball.velocity = Vector(my_ball.velocity.x * 1.1, my_ball.velocity.y * 1.1)
+
     for bonus in bonuses:
         bonus.update(dt)
         if bonus.is_cought():
@@ -96,7 +103,7 @@ def update(dt):
 
     if number_of_lives <= 0 or (len(obstacles) == len(obstacles2) == 0):
         my_ball.velocity = Vector(0, 0)
-        start_time = 9999999999999
+        start_time = 9999999999999999
         is_over = True
 
 
