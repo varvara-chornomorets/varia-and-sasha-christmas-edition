@@ -129,33 +129,16 @@ class Obstacle:
 
 
 class Obstacle2:
-    def __init__(self, pos: Vector):
+    def __init__(self, pos: Vector, variant: int):
+        self.variant = variant
         self.position = pos
+        self.lives = self.variant
 
     def draw(self, screen):
-        screen.draw.filled_rect(Rect((self.position.x-50, self.position.y-10), (OBSTACLE_WIDTH, OBSTACLE_HEIGHT)), "red")
-
-    def update(self, screen, ball: Ball):
-        if self.position.y - 10 < ball.position.y < self.position.y + 10:
-            if self.position.x - 65 < ball.position.x < self.position.x + 65:
-                return 2
-        if self.position.y - 25 < ball.position.y < self.position.y + 25:
-            if self.position.x - 50 < ball.position.x < self.position.x + 50:
-                return 1
-        if self.position.y - 20 < ball.position.y < self.position.y + 20:
-            if self.position.x - 60 < ball.position.x < self.position.x + 60:
-                return 3
-        else:
-            return False
-
-
-class HeavyObstacle:
-    def __init__(self, pos: Vector):
-        self.position = pos
-        self.lives = 3
-
-    def draw(self, screen):
-        screen.draw.filled_rect(Rect((self.position.x-50, self.position.y-10), (OBSTACLE_WIDTH, OBSTACLE_HEIGHT)), "blue")
+        colours = {1 : "red",
+                   2 : "orange",
+                   3 : "blue"}
+        screen.draw.filled_rect(Rect((self.position.x-50, self.position.y-10), (OBSTACLE_WIDTH, OBSTACLE_HEIGHT)), colours[self.variant])
 
     def update(self, screen, ball: Ball):
         if self.position.y - 10 < ball.position.y < self.position.y + 10:

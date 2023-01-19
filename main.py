@@ -1,7 +1,7 @@
 import random
 
 from pgzero.actor import Actor
-from cls import Vector, Paddle, Ball, Bonus, LongBonus, Heart, Obstacle, Obstacle2, HeavyObstacle
+from cls import Vector, Paddle, Ball, Bonus, LongBonus, Heart, Obstacle, Obstacle2
 import pgzrun
 import pygame
 import math
@@ -20,13 +20,11 @@ DISTANCE_BETWEEN_HEARTS = 23
 positions = []
 obstacles = []
 obstacles2 = []
-obstacles3 = []
 for i in range(100, 600, 100):
     obstacles.append(Obstacle(Vector(i, 100)))
-#for i in range(75, 600, 150):
-#    obstacles2.append(Obstacle2(Vector(i, 200)))
 for i in range(75, 600, 150):
-    obstacles3.append(HeavyObstacle(Vector(i, 200)))
+    obstacles2.append(Obstacle2(Vector(i, 200), 2))
+
 
 is_over = False
 bonuses = []
@@ -53,8 +51,6 @@ def draw():
     for obstacle in obstacles:
         obstacle.draw(screen)
     for obstacle in obstacles2:
-        obstacle.draw(screen)
-    for obstacle in obstacles3:
         obstacle.draw(screen)
     if is_over:
         if number_of_lives == 0:
@@ -124,35 +120,23 @@ def update(dt):
     for obstacle in obstacles2:
         if obstacle.update(screen, my_ball) == 1:
             my_ball.velocity.y = -my_ball.velocity.y
-            obstacles2.remove(obstacle)
+            obstacle.lives -= 1
+            if obstacle.lives == 0:
+                obstacles2.remove(obstacle)
         elif obstacle.update(screen, my_ball) == 2:
             my_ball.velocity.x = -my_ball.velocity.x
-            obstacles2.remove(obstacle)
+            obstacle.lives -= 1
+            if obstacle.lives == 0:
+                obstacles2.remove(obstacle)
         elif obstacle.update(screen, my_ball) == 3:
             tempvelocity = my_ball.velocity.x
             my_ball.velocity.x = my_ball.velocity.y
             my_ball.velocity.y = tempvelocity
-            obstacles2.remove(obstacle)
+            obstacle.lives -= 1
+            if obstacle.lives == 0:
+                obstacles2.remove(obstacle)
 
-    for obstacle in obstacles3:
-        if obstacle.update(screen, my_ball) == 1:
-            my_ball.velocity.y = -my_ball.velocity.y
-            obstacle.lives -= 1
-            if obstacle.lives == 0:
-                obstacles3.remove(obstacle)
-        elif obstacle.update(screen, my_ball) == 2:
-            my_ball.velocity.x = -my_ball.velocity.x
-            obstacle.lives -= 1
-            if obstacle.lives == 0:
-                obstacles3.remove(obstacle)
-        elif obstacle.update(screen, my_ball) == 3:
-            tempvelocity = my_ball.velocity.x
-            my_ball.velocity.x = my_ball.velocity.y
-            my_ball.velocity.y = tempvelocity
-            obstacle.lives -= 1
-            if obstacle.lives == 0:
-                obstacles3.remove(obstacle)
-    if number_of_lives <= 0 or (len(obstacles) == len(obstacles2) == 0 == len(obstacles3)):
+    if number_of_lives <= 0 or (len(obstacles) == len(obstacles2) == 0):
         my_ball.velocity = Vector(0, 0)
         start_time = 9999999999999999999999999999999999999
         long_start_time = start_time
