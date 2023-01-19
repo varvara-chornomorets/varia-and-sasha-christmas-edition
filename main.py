@@ -22,8 +22,10 @@ obstacles = []
 obstacles2 = []
 for i in range(100, 600, 100):
     obstacles.append(Obstacle(Vector(i, 100)))
-for i in range(75, 600, 150):
+for i in range(75, 300, 150):
     obstacles2.append(Obstacle2(Vector(i, 200), 2))
+for i in range(375, 600, 150):
+    obstacles2.append(Obstacle2(Vector(i, 200), 3))
 
 
 is_over = False
