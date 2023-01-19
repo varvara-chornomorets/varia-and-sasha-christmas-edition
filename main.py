@@ -1,7 +1,7 @@
 import random
 
 from pgzero.actor import Actor
-from cls import Vector, Paddle, Ball, Heart, Obstacle, Obstacle2
+from cls import Vector, Paddle, Ball, Bonus, LongBonus, Heart, Obstacle, Obstacle2
 import pgzrun
 import pygame
 import math
@@ -28,15 +28,23 @@ for i in range(75, 600, 150):
 
 is_over = False
 bonuses = []
+long_bonuses = []
 start_time = pygame.time.get_ticks()
+long_start_time = start_time
+PLATFORM_WIDTH = 200
+time_caught = 0
+coefficient = 1
 
 
 def draw():
+    global coefficient
     screen.clear()
-    platform.draw(screen)
+    platform.draw(screen, PLATFORM_WIDTH * coefficient)
     my_ball.draw(screen)
     for bonus in bonuses:
         bonus.draw()
+    for long_bonus in long_bonuses:
+        long_bonus.draw()
     for i in range(0, number_of_lives):
         position = Vector(HEART_START_POSITION.x + DISTANCE_BETWEEN_HEARTS * i, HEART_START_POSITION.y)
         Heart(position).draw()
@@ -63,6 +71,9 @@ def update(dt):
     global start_time
     global number_of_lives
     global my_ball
+    global time_caught
+    global coefficient
+    global long_start_time
 
     current_time = pygame.time.get_ticks()
     if current_time - start_time > 10000:
@@ -74,14 +85,29 @@ def update(dt):
         # speep up the game
         my_ball.velocity = Vector(my_ball.velocity.x * 1.1, my_ball.velocity.y * 1.1)
 
+    if current_time - long_start_time > 15000:
+        x_coordinate = random.randint(10, WIDTH - 10)
+        long_bonuses.append(LongBonus(Vector(x_coordinate, -10)))
+        long_start_time = current_time
+
     for bonus in bonuses:
         bonus.update(dt)
-        if bonus.is_cought():
+        if bonus.is_cought(PLATFORM_WIDTH * coefficient):
             bonuses.remove(bonus)
             number_of_lives += 1
 
+    for long_bonus in long_bonuses:
+        long_bonus.update(dt)
+        if long_bonus.is_cought():
+            coefficient = 1.5
+            long_bonuses.remove(long_bonus)
+            time_caught = pygame.time.get_ticks()
+
+    if current_time - time_caught > 7000:
+        coefficient = 1
+
     platform.update(dt)
-    my_ball.update(dt)
+    my_ball.update(dt, PLATFORM_WIDTH * coefficient)
     count_lives()
 
     for obstacle in obstacles:
