@@ -61,7 +61,7 @@ class Paddle:
         platform_x = self.position.x
 
 
-ball_start_pos = Vector(17, 250)
+ball_start_pos = Vector(150, 250)
 
 
 class Ball:
