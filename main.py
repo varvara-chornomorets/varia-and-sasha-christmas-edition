@@ -11,7 +11,7 @@ WIDTH = 600
 HEIGHT = 600
 
 platform_start_position = Vector(700, 500)
-ball_start_pos = Vector(17, 20)
+ball_start_pos = Vector(17, 250)
 platform = Paddle(platform_start_position)
 my_ball = Ball(ball_start_pos)
 number_of_lives = 3
@@ -154,7 +154,8 @@ def update(dt):
                 obstacles3.remove(obstacle)
     if number_of_lives <= 0 or (len(obstacles) == len(obstacles2) == 0 == len(obstacles3)):
         my_ball.velocity = Vector(0, 0)
-        start_time = 9999999999999999
+        start_time = 9999999999999999999999999999999999999
+        long_start_time = start_time
         is_over = True
 
 
