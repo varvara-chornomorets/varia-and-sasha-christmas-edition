@@ -142,8 +142,8 @@ class Obstacle2:
         if self.position.y - 25 < ball.position.y < self.position.y + 25:
             if self.position.x - 50 < ball.position.x < self.position.x + 50:
                 return 1
-        if self.position.y - 25 < ball.position.y < self.position.y + 25:
-            if self.position.x - 65 < ball.position.x < self.position.x + 65:
+        if self.position.y - 20 < ball.position.y < self.position.y + 20:
+            if self.position.x - 60 < ball.position.x < self.position.x + 60:
                 return 3
         else:
             return False

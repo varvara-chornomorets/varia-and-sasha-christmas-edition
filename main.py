@@ -129,8 +129,9 @@ def update(dt):
             my_ball.velocity.x = -my_ball.velocity.x
             obstacles2.remove(obstacle)
         elif obstacle.update(screen, my_ball) == 3:
-            my_ball.velocity.x = -my_ball.velocity.x
-            my_ball.velocity.y = -my_ball.velocity.y
+            tempvelocity = my_ball.velocity.x
+            my_ball.velocity.x = my_ball.velocity.y
+            my_ball.velocity.y = tempvelocity
             obstacles2.remove(obstacle)
 
     for obstacle in obstacles3:
@@ -145,15 +146,6 @@ def update(dt):
             if obstacle.lives == 0:
                 obstacles3.remove(obstacle)
         elif obstacle.update(screen, my_ball) == 3:
-             # k = 1 / (math.sqrt(2) / my_ball.velocity.magnitude())
-             # if my_ball.position.x < obstacle.position.x:
-             #     my_ball.velocity.x = -1 * k
-             # elif my_ball.position.x > obstacle.position.x:
-             #     my_ball.velocity.x = 1 * k
-             # if my_ball.position.y < obstacle.position.y:
-             #     my_ball.velocity.y = -1 * k
-             # elif my_ball.position.y > obstacle.position.y:
-             #     my_ball.velocity.y = 1 * k
             tempvelocity = my_ball.velocity.x
             my_ball.velocity.x = my_ball.velocity.y
             my_ball.velocity.y = tempvelocity
