@@ -6,7 +6,6 @@ import pygame
 
 WIDTH = 600
 HEIGHT = 600
-PLATFORM_WIDTH = 200
 PLATFORM_HEIGHT = 20
 BALL_RADIUS = 15
 OBSTACLE_RADIUS = 15
@@ -43,8 +42,8 @@ class Paddle:
         self.velocity = Vector(0, 0)
         self.goal = Vector(0, 0)
 
-    def draw(self, screen):
-        screen.draw.filled_rect(Rect((self.position.x-100, self.position.y-10), (PLATFORM_WIDTH, PLATFORM_HEIGHT)), "yellow")
+    def draw(self, screen, platform_width):
+        screen.draw.filled_rect(Rect((self.position.x - platform_width/2, self.position.y-PLATFORM_HEIGHT/2), (platform_width, PLATFORM_HEIGHT)), "yellow")
 
     def position(self):
         return Vector(self.position.x, self.position.y)
@@ -79,7 +78,7 @@ class Ball:
     def ball_is_out(self):
         return self.position.y > HEIGHT + BALL_RADIUS
 
-    def update(self, dt):
+    def update(self, dt, platform_width):
         if self.ball_is_out():
             self.position.x = ball_start_pos.x
             self.position.y = ball_start_pos.y
@@ -88,11 +87,11 @@ class Ball:
             self.velocity.y = -self.velocity.y
         # edges of the platform
         if 490 < self.position.y < 510:
-            if platform_x - 115 < self.position.x < platform_x + 115:
+            if platform_x - platform_width/2 - BALL_RADIUS < self.position.x < platform_x + platform_width/2 + BALL_RADIUS:
                 self.velocity.x = -self.velocity.x
 
         if 475 < self.position.y < 480:
-            if platform_x - 100 < self.position.x < platform_x + 100:
+            if platform_x - platform_width/2 < self.position.x < platform_x + platform_width/2:
                 self.velocity.y = -self.velocity.y
 
         if self.position.x > WIDTH - BALL_RADIUS or self.position.x < BALL_RADIUS:
@@ -186,6 +185,32 @@ class Bonus:
         actor = Actor("heart", center=(self.position.x, self.position.y))
         actor.draw()
 
+    def is_cought(self, platform_width):
+        global platform_x
+        if 475 < self.position.y < 480:
+            if platform_x - platform_width/2 < self.position.x < platform_x + platform_width/2:
+                return True
+        return False
+
+    def update(self, dt):
+        self.position.y += self.velocity.y
+        self.position.x += self.velocity.x
+
+
+class LongBonus:
+    def __init__(self, pos):
+        self.position = pos
+        self.actor = Actor('sunflower', center=(self.position.x, self.position.y))
+        self.velocity = Vector(0, 4)
+        self.goal = Vector(0, 0)
+
+    def position(self):
+        return Vector(self.actor.x, self.actor.y)
+
+    def draw(self):
+        actor = Actor("sunflower", center=(self.position.x, self.position.y))
+        actor.draw()
+
     def is_cought(self):
         global platform_x
         if 475 < self.position.y < 480:
@@ -197,21 +222,6 @@ class Bonus:
         self.position.y += self.velocity.y
         self.position.x += self.velocity.x
 
-        # if self.position.y < 5:
-        #     self.velocity.y = -self.velocity.y
-        # # edges of the platform
-        # if 490 < self.position.y < 510:
-        #     if platform_x - 115 < self.position.x < platform_x + 115:
-        #         self.velocity.x = -self.velocity.x
-        #
-        # if 475 < self.position.y < 480:
-        #     if platform_x - 100 < self.position.x < platform_x + 100:
-        #         self.velocity.y = -self.velocity.y
-        #
-        # if self.position.x > WIDTH - BALL_RADIUS or self.position.x < BALL_RADIUS:
-        #     self.velocity.x = -self.velocity.x
-        # self.position.x += self.velocity.x
-        # self.position.y += self.velocity.y
 
 
 
