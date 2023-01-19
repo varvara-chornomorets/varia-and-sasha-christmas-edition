@@ -114,11 +114,16 @@ class Heart:
 
 
 class Obstacle:
-    def __init__(self, pos: Vector):
+    def __init__(self, pos: Vector, variant: int):
         self.position = pos
+        self.variant = variant
+        self.lives = self.variant
 
     def draw(self, screen):
-        screen.draw.filled_circle((self.position.x, self.position.y), OBSTACLE_RADIUS, "red")
+        colours = {1: "red",
+                   2: "orange",
+                   3: "blue"}
+        screen.draw.filled_circle((self.position.x, self.position.y), OBSTACLE_RADIUS, colours[self.lives])
 
     def update(self, screen, ball: Ball):
         dist = math.sqrt((ball.position.x - self.position.x)**2 + (ball.position.y - self.position.y)**2)

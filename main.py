@@ -20,12 +20,16 @@ DISTANCE_BETWEEN_HEARTS = 23
 positions = []
 obstacles = []
 obstacles2 = []
-for i in range(100, 600, 100):
-    obstacles.append(Obstacle(Vector(i, 100)))
-for i in range(75, 300, 150):
-    obstacles2.append(Obstacle2(Vector(i, 200), 2))
-for i in range(375, 600, 150):
-    obstacles2.append(Obstacle2(Vector(i, 200), 3))
+for i in range(100, 600, 50):
+    obstacles.append(Obstacle(Vector(i, 100), 1))
+for i in range(100, 600, 50):
+    obstacles.append(Obstacle(Vector(i, 150), 2))
+for i in range(100, 600, 50):
+    obstacles.append(Obstacle(Vector(i, 200), 3))
+# for i in range(75, 600, 150):
+#     obstacles2.append(Obstacle2(Vector(i, 200), 2))
+# for i in range(75, 600, 150):
+#     obstacles2.append(Obstacle2(Vector(i, 250), 3))
 
 
 is_over = False
@@ -117,7 +121,9 @@ def update(dt):
             new_velocity = Vector(*obstacle.update(screen, my_ball))
             k = 1/(new_velocity.magnitude()/my_ball.velocity.magnitude())
             my_ball.velocity = new_velocity*k
-            obstacles.remove(obstacle)
+            obstacle.lives -= 1
+            if obstacle.lives == 0:
+                obstacles.remove(obstacle)
 
     for obstacle in obstacles2:
         if obstacle.update(screen, my_ball) == 1:
